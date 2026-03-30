@@ -1,5 +1,4 @@
- ```javascript
-   import express from "express";
+ import express from "express";
    import dotenv from "dotenv";
    import axios from "axios";
 
@@ -68,7 +67,7 @@
              {
                role: "system",
                content:
-                 "You create safe, original, monetizable YouTube Shorts concepts for kids age 4-10. Output JSON only."
+                 "You create safe, original, monetizable YouTube Shorts concepts for kids age 4-10. Output valid JSON only."
              },
              {
                role: "user",
@@ -102,4 +101,3 @@
    app.listen(PORT, () => {
      console.log(`Server running on port ${PORT}`);
    });
- ```
