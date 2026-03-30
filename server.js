@@ -1,4 +1,4 @@
-   import express from "express";
+ import express from "express";
    import dotenv from "dotenv";
    import axios from "axios";
 
@@ -23,6 +23,8 @@
    - monetizable and safe
    - suitable for automation
    - English language
+   - avoid dangerous, violent, disturbing, or harmful elements
+   - avoid needles, weapons, threats, injuries, or fear-based hooks
    - return valid JSON only
 
    Return this exact structure:
@@ -79,12 +81,33 @@
      return JSON.parse(content);
    }
 
+   function isSafeConcept(concept) {
+     const bannedWords = [
+       "needle",
+       "weapon",
+       "gun",
+       "knife",
+       "blood",
+       "hurt",
+       "injury",
+       "kill",
+       "death",
+       "scary",
+       "horror",
+       "threat",
+       "danger"
+     ];
+
+     const text = JSON.stringify(concept).toLowerC ase();
+     return !bannedWords.some(word => text.includes(word));
+   }
+
    app.get("/", (req, res) => {
      res.json({
        ok: true,
        service: "bobo-shorts-automation",
        status: "running",
-       mode: "mvp"
+       mode: "clean-batch"
      });
    });
 
@@ -108,20 +131,29 @@
      }
    });
 
-   app.get("/generate-batch", async (req, res) => {
+   app.get("/generate-batch-clean", async (req, res) => {
      try {
        const rawCount = parseInt(req.query.count || "3", 10);
        const count = Math.max(1, Math.min(rawCount, 5));
 
        const concepts = [];
-       for (let i = 0; i < count; i++) {
+       let attempts = 0;
+       const maxAttempts = count * 4;
+
+       while (concepts.length < count && attempts < maxAttempts) {
+         attempts += 1;
          const concept = await fetchConcept();
-         concepts.push(concept);
+
+         if (isSafeConcept(concept)) {
+           concepts.push(concept);
+         }
        }
 
        res.json({
          ok: true,
-         count,
+         requested: count,
+         returned: concepts.length,
+         attempts,
          concepts
        });
      } catch (error) {
