@@ -1,0 +1,16 @@
+name: Generate Shorts Batch
+
+   on:
+     schedule:
+       - cron: "0 6 * * *"
+       - cron: "0 12 * * *"
+       - cron: "0 18 * * *"
+     workflow_dispatch:
+
+   jobs:
+     call-endpoint:
+       runs-on: ubuntu-latest
+       steps:
+         - name: Call Railway batch endpoint
+           run: |
+             curl --fail "https://bobo-shorts-automation-production.up.railway.app/generate-batch-clean?count=3"
