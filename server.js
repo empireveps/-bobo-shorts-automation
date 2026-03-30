@@ -1,4 +1,4 @@
-import express from "express";
+ import express from "express";
    import dotenv from "dotenv";
    import axios from "axios";
 
@@ -11,16 +11,19 @@ import express from "express";
 
    function buildPrompt() {
      return `
-   Generate one safe, original, monetizable YouTube Shorts concept for kids age 4-10.
+   Generate one original YouTube Shorts concept for a general audience.
 
    Requirements:
    - recurring character: Bobo the Blob
-   - English language
-   - voice-over friendly
-   - bright cartoon style
-   - simple visual story
-   - safe and non-violent
+   - absurd cartoon humor
+   - visual-first comedy
+   - very short format
+   - simple setup
+   - bizarre transformation or strange object
+   - fast, clear, funny
+   - minimal dialogue
    - suitable for automation
+   - monetizable and safe
    - return JSON only
 
    Format:
@@ -58,7 +61,7 @@ import express from "express";
            {
              role: "system",
              content:
-               "You create safe, original, monetizable YouTube Shorts concepts for kids age 4-10. Output valid JSON only."
+               "You create original, safe, monetizable YouTube Shorts concepts for a general audience. Output valid JSON only."
            },
            {
              role: "user",
