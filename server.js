@@ -17,16 +17,15 @@
    - recurring character: Bobo the Blob
    - absurd cartoon humor
    - visual-first comedy
-   - very short format
    - simple setup
-   - bizarre transformation or strange object
-   - fast, clear, funny
-   - minimal dialogue
-   - suitable for automation
+   - bizarre object or transformation
+   - short and clear
    - monetizable and safe
-   - return JSON only
+   - suitable for automation
+   - English language
+   - return valid JSON only
 
-   Format:
+   Return this exact structure:
    {
      "title": "",
      "hook": "",
@@ -35,7 +34,7 @@
      "music_style": "",
      "thumbnail_idea": "",
      "description": "",
-     "tags": ["", "", ""],
+     "tags": ["", "", "", "", ""],
      "scenes": [
        {"scene": 1, "visual": "", "duration_sec": 2},
        {"scene": 2, "visual": "", "duration_sec": 2},
@@ -51,8 +50,6 @@
    }
 
    async function fetchConcept() {
-     const prompt = buildPrompt();
-
      const response = await axios.post(
        "https://api.openai.com/v1/chat/completions",
        {
@@ -65,7 +62,7 @@
            },
            {
              role: "user",
-             content: prompt
+             content: buildPrompt()
            }
          ],
          temperature: 0.9
@@ -85,28 +82,13 @@
      res.json({
        ok: true,
        service: "bobo-shorts-automation",
-       status: "running"
+       status: "running",
+       mode: "mvp"
      });
    });
 
    app.get("/health", (req, res) => {
      res.json({ ok: true });
-   });
-
-   app.get("/generate-concept-test", async (req, res) => {
-     try {
-       const content = await fetchConcept();
-
-       res.json({
-         ok: true,
-         concept_raw: content
-       });
-     } catch (error) {
-       res.status(500).json({
-         ok: false,
-         error: error.response?.data || error.message
-       });
-     }
    });
 
    app.get("/generate-concept-json", async (req, res) => {
