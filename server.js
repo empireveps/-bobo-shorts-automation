@@ -1,4 +1,4 @@
- import express from "express";
+   import express from "express";
    import dotenv from "dotenv";
    import axios from "axios";
 
@@ -75,7 +75,8 @@
        }
      );
 
-     return response.data.choices?.[0]?.message?.content || "{}";
+     const content = response.data.choices?.[0]?.message?.content || "{}";
+     return JSON.parse(content);
    }
 
    app.get("/", (req, res) => {
@@ -93,12 +94,35 @@
 
    app.get("/generate-concept-json", async (req, res) => {
      try {
-       const content = await fetchConcept();
-       const parsed = JSON.parse(content);
+       const concept = await fetchConcept();
 
        res.json({
          ok: true,
-         concept: parsed
+         concept
+       });
+     } catch (error) {
+       res.status(500).json({
+         ok: false,
+         error: error.response?.data || error.message
+       });
+     }
+   });
+
+   app.get("/generate-batch", async (req, res) => {
+     try {
+       const rawCount = parseInt(req.query.count || "3", 10);
+       const count = Math.max(1, Math.min(rawCount, 5));
+
+       const concepts = [];
+       for (let i = 0; i < count; i++) {
+         const concept = await fetchConcept();
+         concepts.push(concept);
+       }
+
+       res.json({
+         ok: true,
+         count,
+         concepts
        });
      } catch (error) {
        res.status(500).json({
