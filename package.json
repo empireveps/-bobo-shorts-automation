@@ -1,5 +1,4 @@
- ```json
-   {
+{
      "name": "bobo-shorts-automation",
      "version": "1.0.0",
      "description": "Automated YouTube Shorts pipeline for Bobo the Blob",
@@ -14,4 +13,3 @@
        "express": "^4.21.2"
      }
    }
- ```
